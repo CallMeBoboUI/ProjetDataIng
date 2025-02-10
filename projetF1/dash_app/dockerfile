@@ -1,0 +1,18 @@
+# Utilisation d'une image Python légère mais avec les outils réseau
+FROM python:3.9-slim
+
+# Définition du répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers nécessaires dans le conteneur
+COPY app.py /app/app.py
+COPY requirements.txt /app/requirements.txt
+
+# Installation des dépendances + outils de diagnostic réseau
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Exposition du port Dash
+EXPOSE 8050
+
+# Commande pour exécuter l'application avec Gunicorn pour meilleure gestion des requêtes
+CMD ["gunicorn", "--bind", "0.0.0.0:8050", "app:server"]
